@@ -7,10 +7,12 @@ const initialState: {
     elevenLabsApiKey?: string | null | undefined;
 
 } = {
-    openAIApiKey: localStorage.getItem('openai-api-key'),
+    openAIApiKey: process.env.REACT_APP_OPENAPI_KEY,
     useOpenAIWhisper: false,
     elevenLabsApiKey: localStorage.getItem('elevenlabs-api-key'),
 };
+
+console.log(initialState);
 
 export const apiKeysSlice = createSlice({
     name: 'apiKeys',

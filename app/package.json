@@ -2,6 +2,7 @@
   "name": "chat-with-gpt",
   "version": "0.2.1",
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.1",
     "@auth0/auth0-spa-js": "^2.0.4",
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.10.6",
@@ -16,6 +17,7 @@
     "broadcast-channel": "^4.20.2",
     "buffer": "^6.0.3",
     "csv": "^6.2.8",
+    "dotenv": "^16.0.3",
     "expiry-set": "^1.0.0",
     "idb-keyval": "^6.2.0",
     "jshashes": "^1.0.8",

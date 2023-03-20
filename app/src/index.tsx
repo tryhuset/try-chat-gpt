@@ -1,49 +1,64 @@
-import { MantineProvider } from '@mantine/core';
-import { ModalsProvider } from '@mantine/modals';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { IntlProvider } from 'react-intl';
-import { Provider } from 'react-redux';
+import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { IntlProvider } from "react-intl";
+import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { PersistGate } from 'redux-persist/integration/react';
-import { AppContextProvider } from './context';
-import store, { persistor } from './store';
+import { PersistGate } from "redux-persist/integration/react";
+import { AppContextProvider } from "./context";
+import store, { persistor } from "./store";
+import { Auth0Provider } from "@auth0/auth0-react";
 
-import ChatPage from './components/pages/chat';
-import LandingPage from './components/pages/landing';
+import ChatPage from "./components/pages/chat";
+import LandingPage from "./components/pages/landing";
 
-import './backend';
-import './index.scss';
+import "./backend";
+import "./index.scss";
+
+const auth0Config = {
+    domain: "tryai.eu.auth0.com",
+    clientId: "NZIiEAjFWIMJHFxd9g0Yhc925tmfpAus",
+    redirectUri: window.location.origin,
+};
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <AppContextProvider>
-            <LandingPage landing={true} />
-        </AppContextProvider>,
+        element: (
+            <AppContextProvider>
+                <LandingPage landing={true} />
+            </AppContextProvider>
+        ),
     },
     {
         path: "/chat/:id",
-        element: <AppContextProvider>
-            <ChatPage />
-        </AppContextProvider>,
+        element: (
+            <AppContextProvider>
+                <ChatPage />
+            </AppContextProvider>
+        ),
     },
     {
         path: "/s/:id",
-        element: <AppContextProvider>
-            <ChatPage share={true} />
-        </AppContextProvider>,
+        element: (
+            <AppContextProvider>
+                <ChatPage share={true} />
+            </AppContextProvider>
+        ),
     },
     {
         path: "/s/:id/*",
-        element: <AppContextProvider>
-            <ChatPage share={true} />
-        </AppContextProvider>,
+        element: (
+            <AppContextProvider>
+                <ChatPage share={true} />
+            </AppContextProvider>
+        ),
     },
 ]);
 
 const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
 
 async function loadLocaleData(locale: string) {
@@ -53,7 +68,7 @@ async function loadLocaleData(locale: string) {
     }
     const messages: any = await response.json();
     for (const key of Object.keys(messages)) {
-        if (typeof messages[key] !== 'string') {
+        if (typeof messages[key] !== "string") {
             messages[key] = messages[key].defaultMessage;
         }
     }
@@ -71,19 +86,25 @@ async function bootstrapApplication() {
     }
 
     root.render(
-        <React.StrictMode>
-            <IntlProvider locale={navigator.language} defaultLocale="en-GB" messages={messages}>
-                <MantineProvider theme={{ colorScheme: "dark" }}>
-                    <Provider store={store}>
-                        <PersistGate loading={null} persistor={persistor}>
-                            <ModalsProvider>
-                                <RouterProvider router={router} />
-                            </ModalsProvider>
-                        </PersistGate>
-                    </Provider>
-                </MantineProvider>
-            </IntlProvider>
-        </React.StrictMode>
+        <Auth0Provider {...auth0Config}>
+            <React.StrictMode>
+                <IntlProvider
+                    locale={navigator.language}
+                    defaultLocale="en-GB"
+                    messages={messages}
+                >
+                    <MantineProvider theme={{ colorScheme: "dark" }}>
+                        <Provider store={store}>
+                            <PersistGate loading={null} persistor={persistor}>
+                                <ModalsProvider>
+                                    <RouterProvider router={router} />
+                                </ModalsProvider>
+                            </PersistGate>
+                        </Provider>
+                    </MantineProvider>
+                </IntlProvider>
+            </React.StrictMode>
+        </Auth0Provider>
     );
 }
 
