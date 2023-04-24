@@ -30,7 +30,7 @@ const persistMessageConfig = {
 const store = configureStore({
   reducer: {
     // auth: authReducer,
-    apiKeys: persistReducer(persistConfig, apiKeysReducer),
+    apiKeys: apiKeysReducer,
     settingsUI: settingsUIReducer,
     voices: persistReducer(persistConfig, voiceReducer),
     parameters: persistReducer(persistConfig, parametersReducer),

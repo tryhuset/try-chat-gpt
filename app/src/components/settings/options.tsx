@@ -119,15 +119,15 @@ export default function GenerationOptionsTab(props: any) {
                     data={[
                         {
                             label: intl.formatMessage({
-                                defaultMessage: "GPT 3.5 Turbo (default)",
+                                defaultMessage: "GPT 4 (default)",
                             }),
-                            value: "gpt-3.5-turbo",
+                            value: "gpt-4",
                         },
                         {
                             label: intl.formatMessage({
-                                defaultMessage: "GPT 4 (requires invite)",
+                                defaultMessage: "GPT 3.5 Turbo",
                             }),
-                            value: "gpt-4",
+                            value: "gpt-3.5-turbo",
                         },
                     ]}
                     onChange={onModelChange}
@@ -135,7 +135,7 @@ export default function GenerationOptionsTab(props: any) {
                 {model === "gpt-4" && (
                     <p style={{ marginBottom: "0.7rem" }}>
                         <FormattedMessage
-                            defaultMessage="Note: GPT-4 will only work if your OpenAI account has been granted access to the new model. <a>Request access here.</a>"
+                            defaultMessage=""
                             values={{
                                 a: (chunk) => (
                                     <a

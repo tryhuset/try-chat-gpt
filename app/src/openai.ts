@@ -9,7 +9,7 @@ Knowledge cutoff: 2021-09
 Current date and time: {{ datetime }}
 `.trim();
 
-export const defaultModel = 'gpt-3.5-turbo';
+export const defaultModel = 'gpt-4';
 
 export interface OpenAIResponseChunk {
     id?: string;
