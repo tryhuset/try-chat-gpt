@@ -135,7 +135,7 @@ export default function GenerationOptionsTab(props: any) {
                 {model === "gpt-4" && (
                     <p style={{ marginBottom: "0.7rem" }}>
                         <FormattedMessage
-                            defaultMessage=""
+                            defaultMessage="GPT-4 is a new model from OpenAI that is currently in beta."
                             values={{
                                 a: (chunk) => (
                                     <a
