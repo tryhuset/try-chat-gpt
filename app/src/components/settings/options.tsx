@@ -5,7 +5,6 @@ import { useCallback, useMemo } from "react";
 import { defaultSystemPrompt, defaultModel } from "../../openai";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import {
     resetModel,
     setModel,
@@ -18,6 +17,8 @@ import {
 } from "../../store/parameters";
 import { selectSettingsOption } from "../../store/settings-ui";
 import { FormattedMessage, useIntl } from "react-intl";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function GenerationOptionsTab(props: any) {
     const intl = useIntl();
@@ -46,13 +47,48 @@ export default function GenerationOptionsTab(props: any) {
         (value: number) => dispatch(setTemperature(value)),
         [dispatch]
     );
+    const confirmSystemPromptShareSuccess = () => toast("Your system prompt has been shared!", {
+        type: "success",
+    })
+    const confirmSystemPromptShareFailure = () => toast("Your system prompt could not be shared. Please try again later.", {
+        type: "error",
+    })
+
+    const onSystemPromptShare = useCallback(async () => {
+        const systemPrompt = {
+            userName: user?.email,
+            systemPrompt: initialSystemPrompt,
+        };
+        
+        // Make a POST request to https://trydigchatgpt.azurewebsites.net/api/sharedSystemPrompts with the systemPrompt as the body
+        
+        try {
+            const response = await fetch("https://trydigchatgpt.azurewebsites.net/api/sharedSystemPrompts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(systemPrompt),
+            });
+
+            if (!response.ok) {
+                confirmSystemPromptShareFailure();
+                return;
+            }
+
+            confirmSystemPromptShareSuccess();
+        } catch (error) {
+            confirmSystemPromptShareFailure();
+        }
+    }, [initialSystemPrompt]);
+
 
     const resettableSystemPromopt =
         initialSystemPrompt &&
         initialSystemPrompt?.trim() !== defaultSystemPrompt.trim();
 
     const resettableModel = model && model?.trim() !== defaultModel.trim();
-    const { logout } = useAuth0();
+    const { user, logout } = useAuth0();
 
     const systemPromptOption = useMemo(
         () => (
@@ -71,6 +107,22 @@ export default function GenerationOptionsTab(props: any) {
                     maxRows={10}
                     autosize
                 />
+                {/* Button to share the prompt internally with the company in the Shared Prompts tab */}
+                <Button
+                    radius={15}
+                    size="sm"
+                    onClick={onSystemPromptShare}
+                    // Center the button under the textarea
+                    style={{ 
+                        display: "block",
+                        margin: "0 auto",
+                        marginTop: "1rem",
+                        marginBottom: "1rem",
+                     }}
+                >
+                    <FormattedMessage defaultMessage="I'm proud of this system prompt! Make it public internally" />
+                </Button>
+                <ToastContainer />
                 <p style={{ marginBottom: "0.7rem" }}>
                     <FormattedMessage
                         defaultMessage="The System Prompt is shown to ChatGPT by the &quot;System&quot; before your first message. The <code>'{{ datetime }}'</code> tag is automatically replaced by the current date and time."
