@@ -11,6 +11,7 @@ import {
     setTab,
 } from "../../store/settings-ui";
 import SpeechOptionsTab from "./speech";
+import SharedPromptsTab from "./sharedPrompts";
 import { FormattedMessage } from "react-intl";
 
 const Container = styled.div`
@@ -108,10 +109,14 @@ export default function SettingsDrawer(props: SettingsDrawerProps) {
                         <Tabs.Tab value="options">Options</Tabs.Tab>
                         {/*<Tabs.Tab value="user">User</Tabs.Tab>*/}
                         <Tabs.Tab value="speech">Speech</Tabs.Tab>
+                        <Tabs.Tab value="Shared Prompts">
+                            Shared Prompts
+                        </Tabs.Tab>
                     </Tabs.List>
                     <UserOptionsTab />
                     <GenerationOptionsTab />
                     <SpeechOptionsTab />
+                    <SharedPromptsTab />
                 </Tabs>
                 <div id="save">
                     <Button variant="light" fullWidth size="md" onClick={close}>
